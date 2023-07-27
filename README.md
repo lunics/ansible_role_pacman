@@ -9,7 +9,7 @@ This role install and manage:
  - system upgrade
 
 ## Usage
-Override [defaults](https://github.com/lunics/ansible_role_pacman/tree/main/defaults/main)
+Override [defaults](https://github.com/lunics/ansible_role_pacman/blob/main/defaults/main.yml)
 ```yaml
 aur_helper: paru
 aur_user:   aur
