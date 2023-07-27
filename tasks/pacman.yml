@@ -1,0 +1,49 @@
+- block:
+  - name: pacman | template > generate pacman.conf
+    template:
+      src:  pacman.conf
+      dest: /etc/pacman.conf
+    notify: "handler | pacman > update cache"
+
+  ## update cache or latest ?
+  ## ko: doesn't update package if present, only refresh keys when db update ?
+  # to avoid invalid or corrupted package, unknown trust gpg key
+  - name: pacman | pacman > install archlinux-keyring
+    pacman:
+      name:  archlinux-keyring
+      # update_cache: true
+      state: latest
+
+  - name: pacman | shell > install gpg pacman {{ 'archlinux' if ansible_architecture == 'x86_64' else 'archlinuxarm' if ansible_architecture == 'aarch64' }} keys
+    shell: >
+      pacman-key --init &&
+      pacman-key --populate {{ item.keyring }}
+    when: ansible_architecture == item.arch
+    loop:
+      - { keyring: archlinux   , arch: x86_64  }
+      - { keyring: archlinuxarm, arch: aarch64 }
+
+
+  - name: pacman | copy > custom repo GPG key
+    copy:
+      src:  "{{ item.key.path }}"
+      dest: "/etc/pacman.d/gnupg/{{ item.key.path | basename }}"
+    loop: arch_repo
+
+    ## TODO: create another list for pacman gpg keys only, not from arch_repo: []
+    # pacman-key --refresh-keys --keyserver hkps://keys.openpgp.org/        # sync la bdd des clés locales par rapport au serveur distant
+    # pacman-key --list-keys    # get result news keys dl
+      # hkp://keyserver.ubuntu.com
+      # hkp://keys.mailvelope.com
+  - name: pacman | shell > import custom repo GPG key to pacman
+    shell:
+      cmd: |
+        pacman-key --add /etc/pacman.d/gnupg{{ item.key.path | basename }}
+        pacman-key --lsign-key {{ item.key.hash }}
+    loop: arch_repo
+
+  - name: pacman > update cache to add new database
+    pacman:
+      update_cache: true          # pacman -Sy
+
+  tags: pacman

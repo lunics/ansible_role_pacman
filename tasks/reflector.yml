@@ -1,0 +1,39 @@
+- block:
+  - name: reflector | pacman > install reflector to refresh mirrors
+    pacman:
+      name: reflector
+
+  - name: reflector | template > deploy reflector config
+    template:
+      src:  reflector.j2
+      dest: /etc/xdg/reflector/reflector.conf
+
+  - name: reflector | service > start and enable reflector
+    service:
+      name:    reflector
+      state:   started        ## restarted block l'install from scratch enabled: yes
+    # changed_when: false
+
+  - name: reflector | replace > set reflector daily
+    replace:
+      path:    /usr/lib/systemd/system/reflector.timer
+      regexp:  weekly
+      replace: daily
+
+  - name: reflector | pacman > update pacman cache
+    pacman:
+      update_cache: yes
+      # force: yes
+    # register: pacman_update
+    # changed_when: false
+
+  # - name: "[shell] update pacman repository mirrors"
+  #   shell: reflector --verbose --sort rate -a 24 -p https --country {{ reflector_countries }} --threads {{ ansible_facts.processor_vcpus }} --save /etc/pacman.d/mirrorlist    # KO
+  #   # old shell: reflector --sort score -p http --country {{ reflector_countries }} --save /etc/pacman.d/mirrorlist
+
+  # - debug:
+  #     msg: pacman update has failed
+  #   when: pacman_update is failed
+
+  when: reflector
+  tags: reflector

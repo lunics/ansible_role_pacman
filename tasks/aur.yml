@@ -1,0 +1,10 @@
+- block:
+  - name: aur | user > check aur user exists
+    user:
+      name:  aur
+      state: present
+
+  - include_tasks: "{{ aur_helper }}.yml"
+
+  when: aur_helper
+  tags: aur

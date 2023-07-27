@@ -1,0 +1,14 @@
+aur_helper: false   # false, yay, paru
+aur_user:   aur
+upgrade:    false
+
+arch_repo: []
+  # - name:     custom-repo
+  #   server:   http://domain-arch-repo:80/
+  #   siglevel: Required DatabaseOptional
+  #   key:
+  #     path:   "{{ path_play }}/files/keys/custom-repo.gpg"
+  #     hash:   F17ABE74A88A1101
+
+reflector: true
+reflector_countries: Germany

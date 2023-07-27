@@ -1,0 +1,20 @@
+galaxy_info:
+  role_name:    pacman
+  author:       lunics
+  description:  A role to setup Pacman and the AUR helper
+  license:      GPL-3.0
+  company:      none
+  min_ansible_version: 2.1
+  platforms:
+    - name: Archlinux
+      versions:
+        - all
+  galaxy_tags:
+    - pacman
+    - pacman_hooks
+    - aur
+    - paru
+    - reflector
+    - upgrade
+
+dependencies: []

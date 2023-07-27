@@ -1,0 +1,19 @@
+- block:
+  - name: upgrade | pacman > install archlinux-keyring
+    pacman:
+      name:         archlinux-keyring
+      state:        latest
+      update_cache: true
+
+  - name: upgrade | service > check system time updated
+    service:
+      name:    chronyd.service
+      state:   restarted
+      enabled: true
+
+  - name: upgrade | pacman > upgrade system
+    pacman:
+      upgrade: yes
+
+  when: upgrade
+  tags: upgrade

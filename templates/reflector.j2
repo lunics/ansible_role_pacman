@@ -1,0 +1,25 @@
+# config file for systemd service
+# reflector --help for details
+
+--save /etc/pacman.d/mirrorlist
+
+# http, https
+--protocol https
+
+# reflector --list-countries
+--country {{ reflector_countries }}
+
+# the n servers most recently synchronized
+--latest 20
+
+# the n servers with highest score
+# --score 20
+
+# age     = last server synchronization
+# age n   = only mirrors that have synchronized in the last n hours
+# rate    = download rate  ## KO a retester
+# country = country name
+# score   = MirrorStatus score    # utilisé avec --country
+# delay   = MirrorStatus delay
+# either  = alphabetical order order by --country  if present
+--sort score

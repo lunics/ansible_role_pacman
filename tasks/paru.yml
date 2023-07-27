@@ -1,0 +1,52 @@
+- block:
+  - name: paru | file > create paru config dir
+    file:
+      path:  "{{ item }}"
+      state: directory
+    with_items:
+      - "{{ path_config }}/paru"
+      - "{{ path_cache  }}/ansible"         # because first time ansible run as aur user
+
+  - name: paru | file > create paru cache dir for {{ aur_user }}
+    file:
+      path:  "{{ path_cache_aur }}"
+      state: directory
+      owner: "{{ aur_user }}"
+
+  # compiled version
+  # sudo pacman -S --needed base-devel
+  # git clone https://aur.archlinux.org/paru.git
+  # cd paru
+  # makepkg -si
+
+  # binary version
+  # - name: paru | aur > install {{ aur_helper }} binary
+  #   aur:
+  #     name: "{{ item }}"
+  #   loop:
+  #     - paru-bin
+  #   become: true
+  #   become_user: "{{ aur_user }}"
+
+  - name: paru | template > generate paru config file
+    template:
+      src:  paru.conf.j2
+      dest: "{{ path_config }}/paru/paru.conf"
+
+  become_user: "{{ aur_user }}"
+  tags: paru
+
+  # - block:
+  #   - name: paru | file > create paru config dir
+  #     file:
+  #       path:  "{{ item }}"
+  #       state: directory
+  #     with_items:
+  #       - "{{ path_config }}/paru"
+
+  #   - name: paru | template > generate paru config file
+  #     template:
+  #       src:  paru.conf.j2
+  #       dest: "{{ path_config }}/paru/paru.conf"
+
+  #   become_user: "{{ user.1.name }}"

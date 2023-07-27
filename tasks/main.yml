@@ -1,0 +1,14 @@
+- block:
+  - import_tasks: pacman.yml
+
+  - import_tasks: reflector.yml
+
+  - import_tasks: aur.yml       ## KO remote install. only local playbook ?
+
+  - import_tasks: upgrade.yml
+
+  # - import_tasks: hooks.yml   ## TODO
+
+  become_user: root
+  when: ansible_distribution in ["Archlinux","Artix Linux"]
+  tags: pacman
