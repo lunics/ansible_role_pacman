@@ -24,4 +24,5 @@ arch_repo:
       hash:   F17ABE74A88A1101
 ```
 TODO
+- add pacman hooks feature
 - manage aur with and without aur_user
