@@ -5,6 +5,8 @@
       state: present
 
   - include_tasks: "{{ aur_helper }}.yml"
+  # - yay
+  # - aura-bin
 
   when: aur_helper
   tags: aur

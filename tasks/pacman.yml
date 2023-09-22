@@ -28,7 +28,7 @@
     copy:
       src:  "{{ item.key.path }}"
       dest: "/etc/pacman.d/gnupg/{{ item.key.path | basename }}"
-    loop: arch_repo
+    loop: "{{ arch_repo }}"
 
     ## TODO: create another list for pacman gpg keys only, not from arch_repo: []
     # pacman-key --refresh-keys --keyserver hkps://keys.openpgp.org/        # sync la bdd des clés locales par rapport au serveur distant
@@ -40,10 +40,18 @@
       cmd: |
         pacman-key --add /etc/pacman.d/gnupg{{ item.key.path | basename }}
         pacman-key --lsign-key {{ item.key.hash }}
-    loop: arch_repo
+    loop: "{{ arch_repo }}"
 
   - name: pacman > update cache to add new database
     pacman:
       update_cache: true          # pacman -Sy
+
+  - name: aur > install downgrade capability
+    aur:
+      name: "{{ item }}"
+    loop:
+      - downgrade
+    become_user: "{{ aur_user }}"
+    when: aur_helper
 
   tags: pacman

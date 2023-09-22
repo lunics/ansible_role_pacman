@@ -5,7 +5,7 @@
 
   - name: reflector | template > deploy reflector config
     template:
-      src:  reflector.j2
+      src:  reflector
       dest: /etc/xdg/reflector/reflector.conf
 
   - name: reflector | service > start and enable reflector

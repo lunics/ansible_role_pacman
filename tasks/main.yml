@@ -7,7 +7,13 @@
 
   - import_tasks: upgrade.yml
 
+  - import_tasks: makepkg.yml
+
   # - import_tasks: hooks.yml   ## TODO
+
+  - import_tasks: paccache.yml
+
+  - import_tasks: auto_update.yml
 
   become_user: root
   when: ansible_distribution in ["Archlinux","Artix Linux"]

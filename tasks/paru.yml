@@ -1,7 +1,7 @@
 - block:
   - name: paru | file > create paru config dir
     file:
-      path:  "{{ item }}"
+      path:  "/home/{{ aur_user + '/' + item }}"
       state: directory
     with_items:
       - "{{ path_config }}/paru"
@@ -9,7 +9,7 @@
 
   - name: paru | file > create paru cache dir for {{ aur_user }}
     file:
-      path:  "{{ path_cache_aur }}"
+      path:  "/home/{{ aur_user + '/' + path_cache_aur }}"
       state: directory
       owner: "{{ aur_user }}"
 
@@ -30,8 +30,8 @@
 
   - name: paru | template > generate paru config file
     template:
-      src:  paru.conf.j2
-      dest: "{{ path_config }}/paru/paru.conf"
+      src:  paru.conf
+      dest: "/home/{{ aur_user + '/' + path_config }}/paru/paru.conf"
 
   become_user: "{{ aur_user }}"
   tags: paru

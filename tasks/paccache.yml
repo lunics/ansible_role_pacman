@@ -1,0 +1,24 @@
+- block:
+  - name: paccache | copy > install pacman cache cleanup service
+    copy:
+      src:  paccache.service
+      dest: /etc/systemd/system/paccache.service
+    notify:
+      - reload systemd config
+
+  - name: paccache | copy > install pacman cache cleanup timer
+    copy:
+      src:  paccache.timer
+      dest: /etc/systemd/system/paccache.timer
+    notify:
+      - reload systemd config
+      - enable paccache timer
+
+  - name: paccache | service > enable paccache timer
+    service:
+      name:    paccache.timer
+      state:   started
+      enabled: yes
+
+  when: paccache
+  tags: paccache

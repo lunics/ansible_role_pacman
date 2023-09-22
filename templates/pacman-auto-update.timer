@@ -1,0 +1,12 @@
+[Unit]
+Description=Pacman Auto Update Timer
+
+[Timer]
+OnCalendar=*-*-1..1 18:00:00        # le premier dimanche de chaque mois à 18h
+#OnBootSec=5min
+#OnUnitInactiveSec=600min           ## try 7d if OnCalendar KO
+#RandomizedDelaySec=10min
+Unit=pacman-auto-update.service
+
+[Install]
+WantedBy=multi-user.target

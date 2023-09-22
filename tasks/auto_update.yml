@@ -1,0 +1,17 @@
+- block:
+  - name: auto_update | aur > install packages
+    aur:
+      name: "{{ item }}"
+    loop:
+      - pacman-auto-update     # service to auto hourly update packages
+    become_user: aur
+
+  - name: auto_update | template > generate pacman-auto-update config to update every 7 days
+    template:
+      src:  pacman-auto-update.timer
+      dest: /usr/lib/systemd/system/pacman-auto-update.timer
+
+  when:
+    - pacman_auto_update
+    - aur_helper
+  tags: pacman_auto_update

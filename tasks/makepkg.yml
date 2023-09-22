@@ -1,0 +1,26 @@
+- block:
+  - name: shell > get number of cpu core
+    shell: nproc
+    register: _nproc
+    changed_when: false
+
+  - name: debug > alert if nproc command fails
+    debug:
+      msg: nproc command failed
+    when: _nproc is failed
+
+  - name: lineinfile > configue /etc/makepkg.conf to use {{ _nproc.stdout }}/n-total cores for compilation
+    lineinfile:
+      path:   /etc/makepkg.conf
+      regexp: ^#MAKEFLAGS=
+      line:   'MAKEFLAGS="-j{{ _nproc.stdout }}"'
+
+    # BEGIN /etc/makepkg configuration
+      # custom build destination for yay packages
+      # sed 's/^#PKGDEST=/PKGDEST=\/home\/unics\/.local\/pkg\/aur/g' -i /etc/makepkg.cong
+      # sed 's/^#BUILDIR=/BUILDIR=\/home\/unics\/.local\/aur_build/g' -i /etc/makepkg.cong
+      # Use all cores for compilation.
+      # sed "s/-j2/-j$(nproc)/;s/^#MAKEFLAGS/MAKEFLAGS/" -i /etc/makepkg.conf
+    # END /etc/makepkg configuration
+
+  tags: makepkg
