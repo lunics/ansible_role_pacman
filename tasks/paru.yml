@@ -13,20 +13,31 @@
       state: directory
       owner: "{{ aur_user }}"
 
-  # compiled version
-  # sudo pacman -S --needed base-devel
-  # git clone https://aur.archlinux.org/paru.git
-  # cd paru
-  # makepkg -si
+  - name: paru | package > intall paru dependencies
+    package:
+      name: "{{ item }}"
+    loop:
+      - base-devel
+      - rust
+    become: true
 
+  # KO, aur module not able to install on remote if paru not alread installed, compiled it instead
   # binary version
-  # - name: paru | aur > install {{ aur_helper }} binary
+  # - name: paru | aur > install dependencies
   #   aur:
   #     name: "{{ item }}"
   #   loop:
   #     - paru-bin
-  #   become: true
   #   become_user: "{{ aur_user }}"
+
+  # KO, makepkg -si needs a sudo password and become_user: root is not allowed
+  # - name: paru | git > clone paru repository
+  #   git:
+  #     repo:  https://aur.archlinux.org/paru.git
+  #     dest:  /tmp/paru
+  # - name: paru | shell > build paru binary
+  #   shell:
+  #     cmd: cd /tmp/paru; makepkg -si
 
   - name: paru | template > generate paru config file
     template:
@@ -35,18 +46,3 @@
 
   become_user: "{{ aur_user }}"
   tags: paru
-
-  # - block:
-  #   - name: paru | file > create paru config dir
-  #     file:
-  #       path:  "{{ item }}"
-  #       state: directory
-  #     with_items:
-  #       - "{{ path_config }}/paru"
-
-  #   - name: paru | template > generate paru config file
-  #     template:
-  #       src:  paru.conf.j2
-  #       dest: "{{ path_config }}/paru/paru.conf"
-
-  #   become_user: "{{ user.1.name }}"

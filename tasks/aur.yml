@@ -1,12 +1,20 @@
 - block:
   - name: aur | user > check aur user exists
     user:
-      name:  aur
+      name:  "{{ aur_user }}"
       state: present
 
   - include_tasks: "{{ aur_helper }}.yml"
+
   # - yay
   # - aura-bin
+
+  - name: aur > install downgrade capability
+    aur:
+      name: "{{ item }}"
+    loop:
+      - downgrade
+    become_user: "{{ aur_user }}"
 
   when: aur_helper
   tags: aur

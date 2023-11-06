@@ -13,7 +13,7 @@
 
   - name: upgrade | pacman > upgrade system
     pacman:
-      upgrade: yes
+      upgrade: true
 
   when: upgrade
   tags: upgrade

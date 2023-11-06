@@ -46,12 +46,4 @@
     pacman:
       update_cache: true          # pacman -Sy
 
-  - name: aur > install downgrade capability
-    aur:
-      name: "{{ item }}"
-    loop:
-      - downgrade
-    become_user: "{{ aur_user }}"
-    when: aur_helper
-
   tags: pacman

@@ -1,11 +1,12 @@
 aur_helper: false   # false, yay, paru
-aur_user:   aur
-upgrade:    false
+aur_user:   []
 
-reflector: false
+reflector:  false
 reflector_countries: []     # ex: Germany
 
-paccache: false
+upgrade:    false
+
+paccache:   false
 pacman_auto_update: false
 
 arch_repo: []
