@@ -3,7 +3,7 @@
 
   - import_tasks: reflector.yml
 
-  - import_tasks: aur.yml       ## KO remote install. only local playbook
+  - import_tasks: aur.yml
 
   - import_tasks: upgrade.yml
 
