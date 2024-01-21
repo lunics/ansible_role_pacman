@@ -4,7 +4,8 @@ aur_user:   []
 reflector:  false
 reflector_countries: []     # ex: Germany
 
-upgrade:    false
+upgrade:     false
+update_paru: false
 
 paccache:   false
 pacman_auto_update: false

@@ -3,8 +3,7 @@
     copy:
       src:  paccache.service
       dest: /etc/systemd/system/paccache.service
-    notify:
-      - reload systemd config
+    notify: reload systemd config
 
   - name: paccache | copy > install pacman cache cleanup timer
     copy:

@@ -19,7 +19,8 @@
     loop:
       - base-devel
       - rust
-    become: true
+      - git
+    become_user: root
 
   # KO, aur module not able to install on remote if paru not alread installed, compiled it instead
   # binary version
@@ -29,15 +30,23 @@
   #   loop:
   #     - paru-bin
   #   become_user: "{{ aur_user }}"
+  - name: stat > Check /bin/paru exists
+    stat:
+      path: /bin/paru
+    register: r_paru
 
-  # KO, makepkg -si needs a sudo password and become_user: root is not allowed
-  # - name: paru | git > clone paru repository
-  #   git:
-  #     repo:  https://aur.archlinux.org/paru.git
-  #     dest:  /tmp/paru
-  # - name: paru | shell > build paru binary
-  #   shell:
-  #     cmd: cd /tmp/paru; makepkg -si
+  - block:
+    - name: paru | git > clone paru repository
+      git:
+        repo:  https://aur.archlinux.org/paru.git
+        dest:  /tmp/paru
+
+    - name: paru | shell > build paru binary
+      shell:
+        cmd: cd /tmp/paru && makepkg --syncdeps --install --noconfirm
+      become_user: "{{ aur_user }}"
+
+    when: not r_paru.stat.exists or update_paru
 
   - name: paru | template > generate paru config file
     template:

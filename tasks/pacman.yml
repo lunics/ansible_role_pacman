@@ -3,7 +3,7 @@
     template:
       src:  pacman.conf
       dest: /etc/pacman.conf
-    notify: "handler | pacman > update cache"
+    notify: pacman > update cache
 
   ## update cache or latest ?
   ## ko: doesn't update package if present, only refresh keys when db update ?
