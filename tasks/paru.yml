@@ -1,15 +1,18 @@
 - block:
-  - name: paru | file > create paru config dir
+  - name: paru | file > Create paru config dir
     file:
-      path:  "/home/{{ aur_user + '/' + item }}"
+      # path:  "/home/{{ aur_user + '/' + item }}"
+      path:  "{{ item }}"
       state: directory
-    with_items:
+    loop:
       - "{{ path_config }}/paru"
       - "{{ path_cache  }}/ansible"         # because first time ansible run as aur user
 
-  - name: paru | file > create paru cache dir for {{ aur_user }}
+  - name: paru | file > Create paru cache dir for {{ aur_user }}
     file:
-      path:  "/home/{{ aur_user + '/' + path_cache_aur }}"
+      # path:  "/home/{{ aur_user + '/' + path_cache_aur }}"
+      # path:  "{{ path_config + '/' + path_cache_aur }}"
+      path:  "{{ path_cache_aur }}"
       state: directory
       owner: "{{ aur_user }}"
 
@@ -51,7 +54,8 @@
   - name: paru | template > generate paru config file
     template:
       src:  paru.conf
-      dest: "/home/{{ aur_user + '/' + path_config }}/paru/paru.conf"
+      # dest: "/home/{{ aur_user + '/' + path_config }}/paru/paru.conf"
+      dest: "{{ path_config }}/paru/paru.conf"
 
   become_user: "{{ aur_user }}"
   tags: paru
